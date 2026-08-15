@@ -1,21 +1,15 @@
-# Jessie's Pattern Math Lab v3
+# Jessie's Pattern Math Lab v4
 
-This version includes the full original wording of all 9 questions.
+This version is question-specific rather than a single repeated template.
 
-## Learning flow
-1. Original question
-2. Highlight key information
-3. Understand the question visually
-4. Discover the operation through grouping
-5. Learn the calculation method
-6. Solve
-7. Summarise
-8. Test the full thinking process
+Highlights:
+- Every question starts with the full original wording plus a clean bead/gem/stone/candy diagram drawn inside the site.
+- The first page gives a concise solving path instead of generic reading prompts.
+- Each question has a custom sequence based on its actual sub-questions.
+- Question 2 follows the requested teaching flow in detail:
+  count one cycle → build 90 ÷ 5 → visually learn 90 ÷ 5 → build purple multiplication → build yellow multiplication → summary → transfer test.
+- Touch-friendly maths sentence builder supports drag-and-drop and tap-to-place.
+- Special “first” items and leftovers are handled explicitly in Questions 6, 8, and 9.
 
-## Update your GitHub repository
-Upload these 3 files to the ROOT of your existing `jessie-pattern-math` repository and replace the old versions:
-- index.html
-- vercel.json
-- README.md
-
-Commit the changes. Vercel should redeploy automatically.
+## Deploy
+Replace the existing GitHub repository files with the contents of this ZIP. Vercel will redeploy automatically after commit.

@@ -13,3 +13,6 @@ Highlights:
 
 ## Deploy
 Replace the existing GitHub repository files with the contents of this ZIP. Vercel will redeploy automatically after commit.
+
+## v4.2 targeted update
+Position-in-a-pattern pages now use full draggable division-with-remainder sentences, e.g. `30 ÷ 6 = 5 R 0` and `55 ÷ 7 = 7 R 6`. Other lesson content is unchanged.

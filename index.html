@@ -6,48 +6,331 @@
 <meta name="theme-color" content="#f8f4ff">
 <title>Jessie's Pattern Math Lab</title>
 <style>
-:root{--bg:#fffaf2;--ink:#23304a;--muted:#69738a;--card:#fff;--accent:#6c63ff;--accent2:#9c8cff;--good:#1f9d68;--soft:#f1efff;--line:#e8e5f3;--shadow:0 8px 30px rgba(60,50,110,.10)}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#fffaf2,#f7f4ff);color:var(--ink)}header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:14px 16px;border-bottom:1px solid #eee}h1{font-size:24px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{max-width:1020px;margin:auto;padding:16px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px}.tabs button{white-space:nowrap}.card{background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow)}.progress{height:9px;background:#eee;border-radius:999px;overflow:hidden;margin:8px 0 16px}.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.3s}.badge{display:inline-block;background:var(--soft);color:#5149cc;padding:6px 10px;border-radius:999px;font-weight:800;font-size:13px}h2{font-size:26px;margin:12px 0}.story{font-size:18px;line-height:1.5}.prompt{font-size:21px;font-weight:850;margin:18px 0 10px}.small{font-size:14px;color:var(--muted)}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.pattern,.work,.panel{background:#fafafa;border:1px solid var(--line);border-radius:18px;padding:14px}.item{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px #0002;border:2px solid #fff}.red{background:#ed5a61}.blue{background:#5a8dcc}.green{background:#5caf69}.yellow{background:#f2ca3d}.purple{background:#8b66bb}.pink{background:#e98aa4}.black{background:#222831}.white{background:#fff;border-color:#aaa}.candy{border-radius:14px}.cycle{display:inline-flex;gap:6px;padding:8px;border:3px dashed #8b82ff;border-radius:16px;background:#f7f5ff}button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 16px;font-size:16px;font-weight:800;color:var(--ink);cursor:pointer}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button.good{background:#dff6ea;border-color:#9dddbf}button:disabled{opacity:.45}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}@media(max-width:640px){.choices{grid-template-columns:1fr}.item{width:36px;height:36px}h2{font-size:23px}}.feedback{min-height:34px;font-weight:800;font-size:17px}.hint{display:none;background:#fff5cc;border-radius:14px;padding:12px;margin-top:10px}.controls{display:flex;justify-content:space-between;gap:12px;margin-top:16px}.eq{font-size:30px;font-weight:900;text-align:center;padding:14px}.groupArea{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-top:12px}.bins{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:240px}.counterBox{min-width:120px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.counter{font-size:26px;font-weight:900}.tenCard{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff}.fiveRow{display:flex;gap:5px;border:2px solid #aaa;border-radius:12px;padding:6px;margin:4px 0}.dot{width:18px;height:18px;border-radius:50%;background:var(--accent)}.rule{background:#eef7ff;border-left:5px solid #5a8dcc;border-radius:12px;padding:12px}.summary{background:#effbf5;border-left:5px solid var(--good);border-radius:12px;padding:12px}.testCard{border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}.miniCycle{display:inline-flex;gap:5px;padding:6px;border:2px dashed #8b82ff;border-radius:12px}.operationReveal{font-size:28px;font-weight:900;text-align:center;margin:16px 0}.splitLine{height:1px;background:var(--line);margin:14px 0}
+:root{
+  --bg:#fffaf2;--ink:#23304a;--muted:#69738a;--card:#fff;
+  --accent:#6c63ff;--accent2:#9c8cff;--good:#1f9d68;--warn:#f39c12;
+  --soft:#f1efff;--line:#e8e5f3;--shadow:0 8px 30px rgba(60,50,110,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#fffaf2,#f7f4ff);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);padding:14px 16px;border-bottom:1px solid #eee}
+h1{font-size:24px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+main{max-width:1040px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px}
+.tabs button{white-space:nowrap}
+.card{background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow)}
+.progress{height:9px;background:#eee;border-radius:999px;overflow:hidden;margin:8px 0 16px}
+.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.3s}
+.badge{display:inline-block;background:var(--soft);color:#5149cc;padding:6px 10px;border-radius:999px;font-weight:800;font-size:13px}
+h2{font-size:26px;margin:12px 0}.story{font-size:18px;line-height:1.5}
+.prompt{font-size:21px;font-weight:850;margin:18px 0 10px}
+.small{font-size:14px;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pattern,.work,.panel{background:#fafafa;border:1px solid var(--line);border-radius:18px;padding:14px}
+.item{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px #0002;border:2px solid #fff}
+.red{background:#ed5a61}.blue{background:#5a8dcc}.green{background:#5caf69}.yellow{background:#f2ca3d}.purple{background:#8b66bb}.pink{background:#e98aa4}.black{background:#222831}.white{background:#fff;border-color:#aaa}
+.candy{border-radius:14px}
+.cycle{display:inline-flex;gap:6px;padding:8px;border:3px dashed #8b82ff;border-radius:16px;background:#f7f5ff}
+button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 16px;font-size:16px;font-weight:800;color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);color:white;border-color:var(--accent)}
+button.good{background:#dff6ea;border-color:#9dddbf}
+button:disabled{opacity:.45}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+@media(max-width:640px){.choices{grid-template-columns:1fr}.item{width:36px;height:36px}h2{font-size:23px}}
+.feedback{min-height:34px;font-weight:800;font-size:17px}
+.hint{display:none;background:#fff5cc;border-radius:14px;padding:12px;margin-top:10px}
+.controls{display:flex;justify-content:space-between;gap:12px;margin-top:16px}
+.eq{font-size:30px;font-weight:900;text-align:center;padding:14px}
+.groupBin{min-width:120px;min-height:76px;border:2px dashed #bbb;border-radius:16px;padding:8px;display:flex;gap:5px;flex-wrap:wrap;align-content:flex-start;background:#fff}
+.counter{font-size:26px;font-weight:900}
+.tenCard{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff}
+.fiveRow{display:flex;gap:5px;border:2px solid #aaa;border-radius:12px;padding:6px;margin:4px 0}
+.dot{width:18px;height:18px;border-radius:50%;background:var(--accent)}
+.rule{background:#eef7ff;border-left:5px solid #5a8dcc;border-radius:12px;padding:12px}
+.summary{background:#effbf5;border-left:5px solid var(--good);border-radius:12px;padding:12px}
+.testCard{border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.original{background:#fffdf8;border:2px solid #efe7d7;border-radius:18px;padding:16px;line-height:1.55}
+.original h3{margin:0 0 8px;font-size:18px}
+.qline{margin:8px 0}
+.key-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+@media(max-width:640px){.key-grid{grid-template-columns:1fr}}
+.key{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+.key.active{background:#fff3c9;border-color:#f1c75b}
+.highlight{background:#fff0a8;border-radius:6px;padding:1px 4px}
 </style>
 </head>
 <body>
-<header><h1>✨ Jessie's Pattern Math Lab</h1><div class="sub">Understand → Discover the operation → Learn the calculation → Solve → Summarise → Test</div></header>
-<main><div class="tabs" id="tabs"></div><div class="card"><span class="badge" id="badge"></span><div class="progress"><div class="bar" id="bar"></div></div><div id="stage"></div><div class="controls"><button id="backBtn">← Back</button><button id="nextBtn" class="primary">Next →</button></div></div></main>
+<header>
+  <h1>✨ Jessie's Pattern Math Lab</h1>
+  <div class="sub">Original question → Highlight key information → Understand → Discover → Calculate → Solve → Summarise → Test</div>
+</header>
+<main>
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <span class="badge" id="badge"></span>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div id="stage"></div>
+    <div class="controls">
+      <button id="backBtn">← Back</button>
+      <button id="nextBtn" class="primary">Next →</button>
+    </div>
+  </div>
+</main>
 <script>
 const Q=[
-{n:1,title:"Emma's gems",total:44,start:[],pat:[["red",2],["blue",1],["green",3]],qtype:"position",pos:30,targets:["green"]},
-{n:2,title:"Sophia's bracelet",total:90,start:[],pat:[["yellow",1],["purple",2],["pink",2]],qtype:"counts",targets:["purple","yellow"]},
-{n:3,title:"Leo's Go stones",total:60,start:[],pat:[["black",4],["white",3]],qtype:"position+count",pos:55,targets:["black"]},
-{n:4,title:"Go stones",total:41,start:[],pat:[["black",3],["white",2]],qtype:"counts",targets:["black","white"]},
-{n:5,title:"Kevin's candies",total:52,start:[],pat:[["red",1],["yellow",2],["green",3]],qtype:"counts",targets:["red","green"],shape:"candy"},
-{n:6,title:"Tom's Go stones",total:51,start:[["black",4]],pat:[["white",2],["black",3]],qtype:"counts",targets:["white","black"]},
-{n:7,title:"Lily's gems",total:47,start:[],pat:[["blue",2],["purple",3],["green",1]],qtype:"counts",targets:["purple","green"]},
-{n:8,title:"Emma's gems",total:55,start:[["blue",3]],pat:[["green",1],["purple",2],["blue",2]],qtype:"counts",targets:["purple"]},
-{n:9,title:"Sophia's candies",total:62,start:[["red",5]],pat:[["yellow",3],["green",2],["red",1]],qtype:"counts",targets:["red"],shape:"candy"}
+{
+n:1,title:"Emma's gems",total:44,start:[],pat:[["red",2],["blue",1],["green",3]],qtype:"position+count",pos:30,targets:["green"],
+original:`There is a box of gems. Emma arranges them in a repeating pattern of 2 red gems, 1 blue gem, and 3 green gems. She places a total of 44 gems.`,
+sub1:`(1) The 30th gem is _____.`,
+sub2:`(2) Among the 44 gems, Emma places _____ green gems in total.`
+},
+{
+n:2,title:"Sophia's bracelet",total:90,start:[],pat:[["yellow",1],["purple",2],["pink",2]],qtype:"counts",targets:["purple","yellow"],
+original:`Sophia makes a bracelet using beads. The pattern repeats as 1 yellow bead, 2 purple beads, and 2 pink beads. She uses a total of 90 beads.`,
+sub1:`(1) There are _____ beads in each cycle, and there are _____ complete cycles in total.`,
+sub2:`(2) In the 90 beads, Sophia uses a total of _____ purple beads and _____ yellow beads.`
+},
+{
+n:3,title:"Leo's Go stones",total:60,start:[],pat:[["black",4],["white",3]],qtype:"position+count",pos:55,targets:["black"],
+original:`There is a pile of Go stones. Leo places them in a repeating pattern of 4 black stones followed by 3 white stones. He places a total of 60 stones.`,
+sub1:`(1) The 55th stone is _____.`,
+sub2:`(2) Among the 60 stones, Leo places _____ black stones in total.`
+},
+{
+n:4,title:"Go stones",total:41,start:[],pat:[["black",3],["white",2]],qtype:"counts",targets:["black","white"],
+original:`A player arranges Go stones in a row. He follows this pattern: 3 black stones, 2 white stones. In the end, he arranges 41 stones altogether.`,
+sub1:`(1) There are _____ stones in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) In the 41 stones, the player puts _____ black stones and _____ white stones in total.`
+},
+{
+n:5,title:"Kevin's candies",total:52,start:[],pat:[["red",1],["yellow",2],["green",3]],qtype:"counts",targets:["red","green"],shape:"candy",
+original:`Kevin arranges candies in a row. He follows this pattern: 1 red candy, 2 yellow candies, and 3 green candies. In the end, he arranges 52 candies altogether.`,
+sub1:`(1) There are _____ candies in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) In the 52 candies, Kevin puts _____ red candies and _____ green candies in total.`
+},
+{
+n:6,title:"Tom's Go stones",total:51,start:[["black",4]],pat:[["white",2],["black",3]],qtype:"counts",targets:["white","black"],
+original:`Tom puts some Go stones in a row. He puts 4 black stones first, and then follows this repeating pattern: 2 white stones and 3 black stones. In the end, Tom puts a total of 51 stones.`,
+sub1:`(1) There are _____ stones in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) How many white stones and black stones does he put altogether?`
+},
+{
+n:7,title:"Lily's gems",total:47,start:[],pat:[["blue",2],["purple",3],["green",1]],qtype:"counts",targets:["purple","green"],
+original:`Lily arranges gems in a row. She follows this pattern: 2 blue gems, 3 purple gems, and 1 green gem. In the end, she arranges 47 gems altogether.`,
+sub1:`(1) There are _____ gems in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) In the 47 gems, Lily puts _____ purple gems and _____ green gems in total.`
+},
+{
+n:8,title:"Emma's gems",total:55,start:[["blue",3]],pat:[["green",1],["purple",2],["blue",2]],qtype:"counts",targets:["purple"],
+original:`Emma arranges some gems in a row. She puts 3 blue gems first, and then follows this repeating pattern: 1 green gem, 2 purple gems, and 2 blue gems. In the end, Emma arranges 55 gems altogether.`,
+sub1:`(1) There are _____ gems in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) How many purple gems does she put altogether?`
+},
+{
+n:9,title:"Sophia's candies",total:62,start:[["red",5]],pat:[["yellow",3],["green",2],["red",1]],qtype:"counts",targets:["red"],shape:"candy",
+original:`Sophia puts some candies in a row. She puts 5 red candies first, and then follows this repeating pattern: 3 yellow candies, 2 green candies, and 1 red candy. In the end, Sophia puts 62 candies altogether.`,
+sub1:`(1) There are _____ candies in each cycle, and there are _____ complete cycles.`,
+sub2:`(2) How many red candies does she put altogether?`
+}
 ];
-let qi=0,step=0; const stage=document.getElementById('stage'),badge=document.getElementById('badge'),bar=document.getElementById('bar'),backBtn=document.getElementById('backBtn'),nextBtn=document.getElementById('nextBtn');
-const cycleSize=q=>q.pat.reduce((a,x)=>a+x[1],0), startSize=q=>q.start.reduce((a,x)=>a+x[1],0);
-function dot(c,shape=''){return `<span class="item ${c} ${shape||''}"></span>`}
-function renderSpec(spec,shape=''){return spec.map(([c,k])=>Array.from({length:k},()=>dot(c,shape)).join('')).join('')}
-function expand(spec){const a=[];spec.forEach(([c,k])=>{for(let i=0;i<k;i++)a.push(c)});return a}
-function calc(q){const c=cycleSize(q),s=startSize(q),remain=q.total-s,full=Math.floor(remain/c),rem=remain%c,pat=expand(q.pat),seq=[];q.start.forEach(([c,k])=>{for(let i=0;i<k;i++)seq.push(c)});for(let i=0;i<remain;i++)seq.push(pat[i%c]);return{c,s,remain,full,rem,seq}}
-function tabs(){document.getElementById('tabs').innerHTML=Q.map((q,i)=>`<button class="${i===qi?'primary':''}" onclick="qi=${i};step=0;render()">Q${q.n}</button>`).join('')}
-function header(){const names=['Understand','Discover the operation','Learn the calculation','Solve','Summarise','Test'];badge.textContent=`Question ${Q[qi].n} · Step ${step+1} of 6 · ${names[step]}`;bar.style.width=((step+1)/6*100)+'%';backBtn.disabled=step===0;nextBtn.textContent=step===5?(qi===Q.length-1?'Start again ↻':'Next question →'):'Next →'}
-function setFeedback(ok,msg,id='feedback'){const el=document.getElementById(id);if(!el)return;el.innerHTML=msg;el.style.color=ok?'var(--good)':'#c65b52'}
-function choices(opts,correct,success,wrong,id='feedback'){return `<div class="choices">${opts.map(o=>`<button onclick="pick('${o.key}','${correct}','${encodeURIComponent(success)}','${encodeURIComponent(wrong)}',this,'${id}')">${o.label}</button>`).join('')}</div><div id="${id}" class="feedback"></div>`}
-window.pick=(v,c,s,w,btn,id)=>{if(v===c){btn.classList.add('good');setFeedback(true,decodeURIComponent(s),id)}else setFeedback(false,decodeURIComponent(w),id)};
-function render(){tabs();header();nextBtn.disabled=false;const q=Q[qi],x=calc(q),c=x.c,s=x.s,full=x.full,rem=x.rem;let h='';
-if(step===0){h=`<h2>1. Understand the question</h2><div class="story"><b>${q.title}</b> uses a repeating pattern. There are <b>${q.total}</b> items altogether.</div>`;if(s)h+=`<div class="prompt">These are placed first, before the repeating pattern:</div><div class="pattern row">${renderSpec(q.start,q.shape)}</div><div class="small">These are NOT part of the repeating cycle.</div>`;h+=`<div class="prompt">What repeats?</div><div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span></div>`;if(q.qtype.includes('position'))h+=`<div class="prompt">What is the question asking us to find?</div>${choices([{key:'a',label:`Where the ${q.pos}th item lands`},{key:'b',label:'How many items are in the row'}],'a','Yes. We are finding a position inside the repeating pattern.','Look for the position number in the question.')}`;else h+=`<div class="prompt">What is the question asking us to find?</div>${choices([{key:'a',label:`How many ${q.targets.join(' / ')} items there are`},{key:'b',label:'What the next item is'}],'a','Yes. We are finding a colour total.','Look at the blank in the question: it asks for a total count.')}`}
-if(step===1){nextBtn.disabled=true;const base=q.qtype.includes('position')?q.pos:(q.total-s);h=`<h2>2. Discover the operation</h2><div class="story">We will <b>do the maths action first</b>. Only after Jessie understands the action will we give it an operation name.</div><div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span> <b>= ${c} in one complete cycle</b></div>`;if(s)h+=`<div class="rule"><b>First move:</b> take away the ${s} item${s>1?'s':''} that were placed before the pattern.<div class="eq">${q.total} − ${s} = ${q.total-s}</div></div>`;h+=`<div class="prompt">We have ${base} items to organise. Put ${c} into each cycle box.</div><button class="primary" id="groupBtn">Make one group of ${c}</button><div class="groupArea"><div class="bins" id="bins"></div><div class="counterBox"><div class="small">Items left</div><div class="counter" id="left">${base}</div><div class="small">Full groups</div><div class="counter" id="groups">0</div></div></div><div id="feedback" class="feedback"></div><div class="hint">We are keeping the total the same and separating it into equal groups.</div>`;setTimeout(()=>{let left=base,g=0;const btn=document.getElementById('groupBtn'),bins=document.getElementById('bins'),lc=document.getElementById('left'),gc=document.getElementById('groups');btn.onclick=()=>{if(left<c)return;left-=c;g++;bins.innerHTML+=`<span class="miniCycle">${renderSpec(q.pat,q.shape)}</span>`;lc.textContent=left;gc.textContent=g;if(left<c){btn.disabled=true;setFeedback(true,`You made <b>${g} complete groups</b>${left?` and have <b>${left}</b> left over`:' with nothing left over'}. What did we just do? We found how many equal groups fit inside a known total.`);nextBtn.disabled=false}}},0)}
-if(step===2){const base=q.qtype.includes('position')?q.pos:(q.total-s);h=`<h2>3. Learn the calculation</h2><div class="story">Now we name the action Jessie just performed.</div><div class="operationReveal">TOTAL → equal groups of ${c} → HOW MANY GROUPS?</div><div class="rule"><b>This action is division.</b><br>Division means: “I know the total and the size of each equal group. How many groups can I make?”</div><div class="eq">${base} ÷ ${c} = ?</div>`;if(base===90&&c===5){nextBtn.disabled=true;h+=`<div class="prompt">Why is 90 ÷ 5 equal to 18?</div><div class="story">90 = 9 tens. Tap each 10 and split it into two groups of 5.</div><div class="row" id="tens">${Array.from({length:9},()=>`<button class="tenCard"><b>10</b><div class="row">${Array.from({length:10},()=>'<span class="dot"></span>').join('')}</div></button>`).join('')}</div><div class="row"><div class="counterBox"><div class="small">Tens opened</div><div class="counter" id="opened">0 / 9</div></div><div class="counterBox"><div class="small">Groups of 5 found</div><div class="counter" id="g5">0</div></div></div><div id="feedback" class="feedback"></div>`;setTimeout(()=>{let o=0;document.querySelectorAll('.tenCard').forEach(btn=>btn.onclick=()=>{if(btn.dataset.done)return;btn.dataset.done='1';o++;btn.innerHTML=`<b>10 = 5 + 5</b><div class="fiveRow">${Array.from({length:5},()=>'<span class="dot"></span>').join('')}</div><div class="fiveRow">${Array.from({length:5},()=>'<span class="dot"></span>').join('')}</div>`;document.getElementById('opened').textContent=`${o} / 9`;document.getElementById('g5').textContent=o*2;if(o===9){setFeedback(true,'You found 18 groups of 5. That is why 90 ÷ 5 = 18.');nextBtn.disabled=false}})},0)}else{h+=`<div class="prompt">Which sentence describes what you just did?</div>${choices([{key:'a',label:`I split ${base} into equal groups of ${c}`},{key:'b',label:`I made ${base} groups of ${c}`}],'a','Exactly. That is division thinking.','Think back to the boxes: did you split one total, or create many new totals?')}<div class="summary"><b>Quick rule:</b> Total ÷ items in one cycle = number of complete cycles, plus a remainder if anything is left.</div>`}}
-if(step===3){h=`<h2>4. Solve the whole question</h2>`;if(q.qtype.includes('position')){const idx=q.pos-1,color=x.seq[idx],rel=q.pos-s,rempos=((rel-1)%c)+1;h+=`<div class="story">For a position question, division tells us which cycle we are in, and the <b>remainder tells us the position inside one cycle</b>.</div><div class="rule">Remainder 1 = 1st item in the cycle. Remainder 2 = 2nd item. Remainder 0 = the last item in the cycle.</div><div class="prompt">Position ${q.pos} lands at position <b>${rempos}</b> inside one cycle. Which colour is there?</div><div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span></div>${choices([...new Set(expand(q.pat))].map(c=>({key:c,label:c})),color,`Yes. The ${q.pos}th item is ${color}.`,'Count inside ONE cycle using the remainder position.')}` }else{const target=q.targets[0],per=(q.pat.find(z=>z[0]===target)||[target,0])[1],initial=(q.start.find(z=>z[0]===target)||[target,0])[1];let left=rem,extra=0;for(const [col,k] of q.pat){const take=Math.min(k,left);if(col===target)extra+=take;left-=take;if(left<=0)break}const ans=full*per+initial+extra;h+=`<div class="story">We have <b>${full}</b> complete cycles${rem?` and ${rem} leftover item${rem>1?'s':''}`:''}.</div><div class="prompt">Track only the ${target} items.</div><div class="story">Each full cycle has <b>${per}</b> ${target} item${per===1?'':'s'}.</div><div class="eq">${full} × ${per}${initial?` + ${initial}`:''}${extra?` + ${extra}`:''} = ?</div>${choices([{key:String(ans),label:String(ans)},{key:String(ans+1),label:String(ans+1)},{key:String(Math.max(0,ans-1)),label:String(Math.max(0,ans-1))}],String(ans),`Yes. There are ${ans} ${target} items.`,'Use: full cycles × target-per-cycle, then check first items and leftovers.')}`}}
-if(step===4){h=`<h2>5. Summarise the strategy</h2><div class="summary"><b>Pattern problem strategy</b><br>1) Find ONE complete cycle.<br>2) Count the items in one cycle.<br>3) Check whether some items were placed <b>first</b>, before the pattern.<br>4) If you know a total and the size of each group, division tells you how many equal groups fit.<br>5) For colour totals: full cycles × colour-per-cycle, then add any beginning or leftover items.<br>6) For position questions: the remainder tells you where you land inside one cycle.</div><div class="rule" style="margin-top:12px"><b>Mental maths tip for ÷5:</b><br>90 ÷ 5 can be seen as 50 ÷ 5 + 40 ÷ 5 = 10 + 8 = 18.<br>Another shortcut: divide by 10, then double. 90 ÷ 10 = 9; 9 × 2 = 18.</div>`}
-if(step===5){nextBtn.disabled=true;window.t2=false;window.t3=false;h=`<h2>6. Test the thinking process</h2><div class="testCard"><b>Test 1:</b> What should you find first?</div>${choices([{key:'cycle',label:'One complete cycle'},{key:'answer',label:'The final answer'}],'cycle','Good. Find the cycle before calculating.','The answer comes later. First find what repeats.','feedback1')}<div class="testCard"><b>Test 2:</b> You know the total and how many are in each equal group. What are you trying to find?</div><div class="choices"><button onclick="test2('groups',this)">How many groups</button><button onclick="test2('total',this)">The total again</button></div><div id="feedback2" class="feedback"></div><div class="testCard"><b>Test 3:</b> Should leftover items always be ignored?</div><div class="choices"><button onclick="test3('no',this)">No — check them</button><button onclick="test3('yes',this)">Yes — ignore them</button></div><div id="feedback3" class="feedback"></div>`}
-stage.innerHTML=h}
-window.test2=(v,btn)=>{if(v==='groups'){btn.classList.add('good');setFeedback(true,'✅ Yes. That is division thinking.','feedback2');window.t2=true}else setFeedback(false,'We already know the total.','feedback2');checkTests()}
-window.test3=(v,btn)=>{if(v==='no'){btn.classList.add('good');setFeedback(true,'✅ Correct. Leftovers can change the answer.','feedback3');window.t3=true}else setFeedback(false,'A leftover may contain the colour we are counting.','feedback3');checkTests()}
-function checkTests(){if(window.t2&&window.t3)nextBtn.disabled=false}
-backBtn.onclick=()=>{if(step>0){step--;render()}};nextBtn.onclick=()=>{if(nextBtn.disabled)return;if(step<5){step++;render()}else{qi=(qi+1)%Q.length;step=0;render()}};render();
+
+let qi=0,step=0;
+const stage=document.getElementById("stage"), badge=document.getElementById("badge"), bar=document.getElementById("bar");
+const backBtn=document.getElementById("backBtn"), nextBtn=document.getElementById("nextBtn");
+
+function cycleSize(q){return q.pat.reduce((a,x)=>a+x[1],0)}
+function startSize(q){return q.start.reduce((a,x)=>a+x[1],0)}
+function dot(c,shape=""){return `<span class="item ${c} ${shape||""}"></span>`}
+function renderSpec(spec,shape=""){return spec.map(([c,k])=>Array.from({length:k},()=>dot(c,shape)).join("")).join("")}
+function expandSpec(spec){const a=[];spec.forEach(([c,k])=>{for(let i=0;i<k;i++)a.push(c)});return a}
+function calc(q){
+ const c=cycleSize(q), s=startSize(q), remain=q.total-s, full=Math.floor(remain/c), rem=remain%c;
+ const expanded=expandSpec(q.pat), seq=[];
+ q.start.forEach(([c,k])=>{for(let i=0;i<k;i++)seq.push(c)});
+ for(let i=0;i<remain;i++)seq.push(expanded[i%c]);
+ return {c,s,remain,full,rem,seq};
+}
+function tabs(){document.getElementById("tabs").innerHTML=Q.map((q,i)=>`<button class="${i===qi?'primary':''}" onclick="qi=${i};step=0;render()">Q${q.n}</button>`).join("")}
+function setHeader(){
+ const names=["Original question","Highlight key information","Understand","Discover the operation","Learn the calculation","Solve","Summarise","Test"];
+ badge.textContent=`Question ${Q[qi].n} · Step ${step+1} of 8 · ${names[step]}`;
+ bar.style.width=((step+1)/8*100)+"%";
+ backBtn.disabled=step===0;
+ nextBtn.textContent=step===7?(qi===Q.length-1?"Start again ↻":"Next question →"):"Next →";
+}
+function feedback(ok,msg){
+ const el=document.getElementById("feedback"); if(!el)return;
+ el.innerHTML=msg;el.style.color=ok?"var(--good)":"#c65b52";
+}
+function makeChoiceButtons(opts,correct,success,wrong){
+ return `<div class="choices">${opts.map(o=>`<button onclick="choice('${o.key}','${correct}','${encodeURIComponent(success)}','${encodeURIComponent(wrong)}',this)">${o.label}</button>`).join("")}</div><div id="feedback" class="feedback"></div>`;
+}
+window.choice=(v,correct,success,wrong,btn)=>{
+ if(v===correct){btn.classList.add("good");feedback(true,decodeURIComponent(success))}
+ else{feedback(false,decodeURIComponent(wrong));const h=document.querySelector(".hint");if(h)h.style.display="block";}
+};
+
+function originalBlock(q){
+ return `<div class="original">
+ <h3>📘 Original Question</h3>
+ <div class="qline">${q.original}</div>
+ <div class="qline"><b>${q.sub1}</b></div>
+ <div class="qline"><b>${q.sub2}</b></div>
+ </div>`;
+}
+
+function render(){
+ tabs();setHeader();
+ const q=Q[qi],x=calc(q),c=x.c,s=x.s,full=x.full,rem=x.rem;
+ let h="";
+
+ if(step===0){
+   h=`<h2>1. Read the original question</h2>${originalBlock(q)}
+   <div class="prompt">First goal: read it once without calculating.</div>
+   <div class="rule">Ask: <b>Who/what is being arranged? What repeats? What total is given? What does each blank ask for?</b></div>`;
+ }
+
+ if(step===1){
+   h=`<h2>2. Highlight the key information</h2>${originalBlock(q)}
+   <div class="prompt">Tap the information we will need.</div>
+   <div class="key-grid">
+     <button class="key" onclick="this.classList.toggle('active')"><b>Total</b><br>${q.total} items altogether</button>
+     <button class="key" onclick="this.classList.toggle('active')"><b>One repeating cycle</b><br>${q.pat.map(([col,k])=>`${k} ${col}`).join(" + ")}</button>
+     ${s?`<button class="key" onclick="this.classList.toggle('active')"><b>Before the cycle starts</b><br>${q.start.map(([col,k])=>`${k} ${col}`).join(" + ")}</button>`:""}
+     ${q.qtype.includes("position")?`<button class="key" onclick="this.classList.toggle('active')"><b>Position to find</b><br>${q.pos}th item</button>`:""}
+     <button class="key" onclick="this.classList.toggle('active')"><b>Colour(s) to count</b><br>${q.targets.join(", ")}</button>
+   </div>
+   <div class="small">Jessie should be able to point to each fact in the original wording before moving on.</div>`;
+ }
+
+ if(step===2){
+   h=`<h2>3. Understand the question</h2>
+   <div class="story">Now turn the words into a picture.</div>`;
+   if(s){
+     h+=`<div class="prompt">These come first — they are NOT part of the repeating cycle.</div>
+     <div class="pattern row">${renderSpec(q.start,q.shape)}</div>`;
+   }
+   h+=`<div class="prompt">What repeats?</div><div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span></div>`;
+   if(q.qtype.includes("position")){
+     h+=`<div class="prompt">What are we trying to find first?</div>`+
+     makeChoiceButtons(
+       [{key:"a",label:`Where the ${q.pos}th item lands`},{key:"b",label:"How many items are in the row"}],
+       "a","Yes. This part is a position question.","Look at the wording: which number is an ordinal position?");
+   } else {
+     h+=`<div class="prompt">What are we trying to find?</div>`+
+     makeChoiceButtons(
+       [{key:"a",label:`How many ${q.targets.join(" / ")} items there are`},{key:"b",label:"What comes next"}],
+       "a","Yes. This part is asking for a total count of a colour.","Look at the blank: it asks how many of a certain colour.");
+   }
+ }
+
+ if(step===3){
+   const base=q.qtype.includes("position")?q.pos:(q.total-s);
+   h=`<h2>4. Discover the operation</h2>
+   <div class="story">Don't choose +, −, × or ÷ yet. First, <b>do the action</b>.</div>
+   <div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span> <b>= ${c} in one cycle</b></div>`;
+   if(s)h+=`<div class="rule"><b>Before grouping:</b> take away the ${s} item${s>1?'s':''} that came first. ${q.total} − ${s} = ${q.total-s}.</div>`;
+   h+=`<div class="prompt">Make equal groups of ${c} from ${base}.</div>
+   <button class="primary" id="groupBtn">Make one group</button>
+   <div class="row" style="margin-top:12px"><div class="groupBin" id="doneBins"></div><div><div class="small">Items left</div><div class="counter" id="leftCount">${base}</div></div></div>
+   <div id="feedback" class="feedback"></div>`;
+   setTimeout(()=>{
+     let left=base,groups=0;
+     const btn=document.getElementById("groupBtn"),bins=document.getElementById("doneBins"),lc=document.getElementById("leftCount");
+     btn.onclick=()=>{
+       if(left<c){btn.disabled=true;feedback(true,`We found ${groups} complete groups${left?` and ${left} left over`:""}.`);return}
+       left-=c;groups++;
+       bins.innerHTML+=`<span class="cycle">${renderSpec(q.pat,q.shape)}</span>`;
+       lc.textContent=left;
+       if(left<c){
+         btn.textContent="No more full groups";
+         feedback(true,`You just split a known total into equal groups. That action is what division describes.`);
+       }
+     }
+   },0);
+ }
+
+ if(step===4){
+   const base=q.qtype.includes("position")?q.pos:(q.total-s);
+   h=`<h2>5. Learn the calculation</h2>
+   <div class="rule"><b>Division = total ÷ size of each equal group = how many groups.</b></div>
+   <div class="eq">${base} ÷ ${c} = ?</div>`;
+   if(base===90 && c===5){
+     h+=`<div class="prompt">Why is 90 ÷ 5 = 18?</div>
+     <div class="story">90 = 9 tens. Tap each 10 and split it into two groups of 5.</div>
+     <div class="row" id="tens">${Array.from({length:9},(_,i)=>`<button class="tenCard" data-i="${i}"><div><b>10</b></div><div class="row">${Array.from({length:10},()=>'<span class="dot"></span>').join('')}</div></button>`).join("")}</div>
+     <div class="row" style="margin-top:12px"><div><span class="small">Tens opened</span><div class="counter" id="opened">0 / 9</div></div><div><span class="small">Groups of 5</span><div class="counter" id="g5">0</div></div></div>
+     <div id="feedback" class="feedback"></div>
+     <div class="summary"><b>Fast method:</b> 90 ÷ 5 = (90 ÷ 10) × 2 = 9 × 2 = 18.</div>`;
+     setTimeout(()=>{
+       let opened=0;
+       document.querySelectorAll(".tenCard").forEach(btn=>btn.onclick=()=>{
+         if(btn.dataset.done)return;btn.dataset.done="1";opened++;
+         btn.innerHTML=`<div><b>10 = 5 + 5</b></div><div class="fiveRow">${Array.from({length:5},()=>'<span class="dot"></span>').join('')}</div><div class="fiveRow">${Array.from({length:5},()=>'<span class="dot"></span>').join('')}</div>`;
+         document.getElementById("opened").textContent=`${opened} / 9`;
+         document.getElementById("g5").textContent=opened*2;
+         if(opened===9)feedback(true,"You found 18 groups of 5. So 90 ÷ 5 = 18.");
+       });
+     },0);
+   } else {
+     h+=`<div class="prompt">Which statement matches the picture you just made?</div>`+
+     makeChoiceButtons(
+       [{key:"a",label:`Split ${base} into groups of ${c}`},{key:"b",label:`Make ${base} groups of ${c}`}],
+       "a","Yes. This is division thinking.","Think about what stayed fixed: the total, or the number of groups?");
+   }
+ }
+
+ if(step===5){
+   h=`<h2>6. Solve the whole question</h2>`;
+   if(q.qtype.includes("position")){
+     const idx=q.pos-1,color=x.seq[idx],rel=q.pos-s,rempos=((rel-1)%c)+1;
+     h+=`<div class="story">Use the remainder to locate the position inside ONE cycle.</div>
+     <div class="rule">Remainder 1 = first item in the cycle. Remainder 2 = second item. Remainder 0 = last item.</div>
+     <div class="prompt">The ${q.pos}th item lands at position ${rempos} inside one cycle. Which colour is there?</div>
+     <div class="pattern"><span class="cycle">${renderSpec(q.pat,q.shape)}</span></div>
+     ${makeChoiceButtons([...new Set(expandSpec(q.pat))].map(c=>({key:c,label:c})),color,`Yes. The ${q.pos}th item is ${color}.`,"Count inside ONE cycle using the remainder position.")}`;
+   } else {
+     const target=q.targets[0],per=(q.pat.find(z=>z[0]===target)||[target,0])[1],initial=(q.start.find(z=>z[0]===target)||[target,0])[1];
+     let left=rem,extra=0;
+     for(const [col,k] of q.pat){const take=Math.min(k,left);if(col===target)extra+=take;left-=take;if(left<=0)break}
+     const answer=full*per+initial+extra;
+     h+=`<div class="story">Complete cycles: <b>${full}</b>${rem?` with ${rem} leftover item${rem>1?'s':''}`:""}.</div>
+     <div class="prompt">Track only the ${target} items.</div>
+     <div class="eq">${full} × ${per}${initial?` + ${initial}`:""}${extra?` + ${extra}`:""} = ?</div>
+     ${makeChoiceButtons(
+       [{key:String(answer),label:String(answer)},{key:String(answer+1),label:String(answer+1)},{key:String(Math.max(0,answer-1)),label:String(Math.max(0,answer-1))}],
+       String(answer),`Yes. There are ${answer} ${target} items.`,"Use complete cycles × colour-per-cycle, then check beginning items and leftovers.")}`;
+   }
+ }
+
+ if(step===6){
+   h=`<h2>7. Summarise the strategy</h2>
+   <div class="summary"><b>Pattern problem checklist</b><br>
+   1) Read the original question.<br>
+   2) Highlight the total, one full cycle, any items that come first, and what the blank is asking for.<br>
+   3) Draw or build ONE cycle.<br>
+   4) If you know the total and the size of each group, division tells you how many full groups fit.<br>
+   5) For colour totals: full cycles × how many of that colour in one cycle, then check beginning items and leftovers.<br>
+   6) For position questions: use the remainder to locate the item inside one cycle.</div>
+   <div class="rule" style="margin-top:12px"><b>Calculation tip:</b> break hard division into friendly chunks. Example: 90 ÷ 5 → 50 ÷ 5 + 40 ÷ 5 → 10 + 8 = 18. Or divide by 10 and double.</div>`;
+ }
+
+ if(step===7){
+   h=`<h2>8. Test the whole thinking process</h2>
+   ${originalBlock(q)}
+   <div class="testCard"><b>Test 1:</b> Point to the total in the original question.</div>
+   <div class="testCard"><b>Test 2:</b> Say one complete cycle aloud.</div>
+   <div class="testCard"><b>Test 3:</b> Explain in your own words what the blank is asking.</div>
+   <div class="testCard"><b>Test 4:</b> Before choosing an operation, show the grouping with your finger or on paper.</div>
+   <div class="testCard"><b>Test 5:</b> Explain why division is useful here.</div>
+   <div class="summary">Parent check: Jessie should be able to explain the reason for each step, not only say the final number.</div>`;
+ }
+ stage.innerHTML=h;
+}
+
+backBtn.onclick=()=>{if(step>0){step--;render()}}
+nextBtn.onclick=()=>{if(step<7){step++;render()}else{qi=(qi+1)%Q.length;step=0;render()}}
+render();
 </script>
 </body>
 </html>

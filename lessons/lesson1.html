@@ -1,0 +1,81 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Lesson 1 — Multiplication</title>
+<style>
+:root{--ink:#23304a;--accent:#6c63ff;--soft:#f1efff;--good:#16875d;--bad:#c95656;--line:#e7e2f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#fffaf4,#f6f2ff);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;background:#fffffff2;padding:12px 16px;border-bottom:1px solid #eee}header a{text-decoration:none;color:#5149cc;font-weight:800}
+main{max-width:1050px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.qs{display:flex;gap:8px;overflow:auto;padding:10px 0}
+button{border:1px solid var(--line);background:white;border-radius:14px;padding:11px 15px;font-size:16px;font-weight:800;color:var(--ink)}button.primary{background:var(--accent);color:white}.card{background:white;border-radius:24px;padding:18px;box-shadow:0 8px 28px #4b3d8015}
+.badge{display:inline-block;background:var(--soft);color:#5149cc;border-radius:999px;padding:6px 10px;font-weight:800}.progress{height:9px;background:#eee;border-radius:99px;overflow:hidden;margin:10px 0 16px}.bar{height:100%;background:var(--accent)}
+h1{margin:0;font-size:25px}h2{font-size:27px;margin:10px 0}.story{font-size:18px;line-height:1.55}.prompt{font-size:21px;font-weight:850;margin:17px 0 10px}.small{font-size:14px;color:#6c7486}
+.tenframes{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:12px}@media(max-width:650px){.tenframes{grid-template-columns:1fr}}
+.frame{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:9px;border:3px solid #c99d60;border-radius:16px;background:#fffaf1;min-height:110px}
+.cell{height:42px;border:1px solid #d8c29f;border-radius:7px;display:flex;align-items:center;justify-content:center}.obj{font-size:28px}
+.eq{font-size:30px;font-weight:900;text-align:center;padding:14px}.choicegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(max-width:650px){.choicegrid{grid-template-columns:1fr}}
+.feedback{min-height:30px;font-weight:800;margin-top:8px}.summary{font-size:20px;line-height:1.55;background:#effbf5;border-left:6px solid var(--good);padding:16px;border-radius:14px}.rule{background:#eef7ff;border-left:5px solid #5a8dcc;padding:13px;border-radius:12px}
+.place{display:grid;grid-template-columns:repeat(3,110px);justify-content:center;gap:10px;margin:14px 0}.place div{border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center}.digit{font-size:34px;font-weight:900}.label{font-size:13px;color:#6c7486}
+.tileTray,.slots{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0}.tile{min-width:65px;text-align:center;font-size:24px;padding:10px;border:2px solid #cfc9ef;border-radius:14px;background:#fff;touch-action:none;user-select:none}.slot{min-width:72px;height:56px;border:3px dashed #bbb4df;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:850}.slot.filled{border-style:solid;border-color:#7e73ff;background:#f1efff}
+.controls{display:flex;justify-content:space-between;gap:12px;margin-top:16px}.carry{font-size:26px;color:#9a4c00;font-weight:900}
+</style></head><body>
+<header><div class="top"><a href="../index.html">← Lessons</a><h1>Lesson 1 — Multiplication</h1></div></header>
+<main><div class="qs" id="qs"></div><div class="card"><span class="badge" id="badge"></span><div class="progress"><div id="bar" class="bar"></div></div><div id="stage"></div><div class="controls"><button id="back">← Back</button><button id="next" class="primary">Next →</button></div></div></main>
+<script>
+const DATA={
+1:{kind:"visual",obj:"🥚",a:15,b:15,total:30,title:"How many eggs altogether?"},
+2:{kind:"visual",obj:"🥚",a:17,b:17,total:34,title:"How many eggs altogether?"},
+3:{kind:"visual",obj:"🍎",a:12,b:12,total:24,title:"How many apples altogether?"},
+4:{kind:"multi",pairs:[[121,2],[237,3]],title:"Calculate the following"},
+5:{kind:"multi",pairs:[[131,3],[227,3]],title:"Calculate the following"},
+6:{kind:"multi",pairs:[[273,3],[162,2]],title:"Calculate the following"},
+7:{kind:"zero",pairs:[[270,2],[220,3]],title:"Multiply numbers ending in zero"},
+8:{kind:"zero",pairs:[[340,2],[290,3]],title:"Multiply numbers ending in zero"},
+9:{kind:"zero",pairs:[[250,3],[330,3]],title:"Multiply numbers ending in zero"}
+};
+let q=1,p=0;
+const qs=document.getElementById("qs"),stage=document.getElementById("stage"),badge=document.getElementById("badge"),bar=document.getElementById("bar"),back=document.getElementById("back"),next=document.getElementById("next");
+function pages(){return DATA[q].kind==="visual"?["see","add","multiply","summary","test"]:DATA[q].kind==="multi"?["concept","first","second","summary","test"]:["zeroConcept","first","second","summary","test"]}
+function drawFrame(n,obj){let s='<div class="frame">';for(let i=0;i<10;i++)s+=`<div class="cell">${i<n?`<span class="obj">${obj}</span>`:""}</div>`;return s+'</div>'}
+function frameSet(n,obj){let full=Math.floor(n/10),rem=n%10,html='<div class="tenframes">';for(let i=0;i<full;i++)html+=drawFrame(10,obj);if(rem)html+=drawFrame(rem,obj);return html+'</div>'}
+function pick(prompt,options,ans){return `<div class="prompt">${prompt}</div><div class="choicegrid">${options.map(x=>`<button onclick="choose(this,'${x}','${ans}')">${x}</button>`).join("")}</div><div id="feedback" class="feedback"></div>`}
+window.choose=(b,v,a)=>{let f=document.getElementById("feedback");if(v===a){b.style.background="#dcf5e8";f.textContent="✅ Yes — explain why.";f.style.color="var(--good)"}else{f.textContent="Use the picture or place value and try again.";f.style.color="var(--bad)"}}
+function tiles(target,distract=[]){let all=[...target,...distract].sort(()=>Math.random()-.5);setTimeout(()=>setup(target),0);return `<div class="small">Drag the tiles. On iPad, tap a tile then tap a box.</div><div class="tileTray">${all.map((v,i)=>`<div class="tile" id="t${i}" draggable="true" data-v="${v}">${v}</div>`).join("")}</div><div class="slots">${target.map(()=>'<div class="slot"></div>').join("")}</div><div id="feedback" class="feedback"></div>`}
+function setup(target){let sel=null,ts=[...document.querySelectorAll(".tile")],ss=[...document.querySelectorAll(".slot")];function place(t,s){if(s.dataset.v)return;s.textContent=t.dataset.v;s.dataset.v=t.dataset.v;s.classList.add("filled");t.style.visibility="hidden";check()}function check(){if(ss.every(s=>s.dataset.v)){let ok=ss.map(s=>s.dataset.v).join("|")===target.join("|"),f=document.getElementById("feedback");f.textContent=ok?"✅ Correct sentence.":"Not quite — clear a box and try again.";f.style.color=ok?"var(--good)":"var(--bad)"}}ts.forEach(t=>{t.onclick=()=>sel=t;t.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",t.id))});ss.forEach(s=>{s.onclick=()=>{if(s.dataset.v){let t=ts.find(x=>x.dataset.v===s.dataset.v&&x.style.visibility==="hidden");if(t)t.style.visibility="visible";delete s.dataset.v;s.textContent="";s.classList.remove("filled")}else if(sel)place(sel,s)};s.addEventListener("dragover",e=>e.preventDefault());s.addEventListener("drop",e=>{e.preventDefault();let t=document.getElementById(e.dataTransfer.getData("text/plain"));if(t)place(t,s)})})}
+function multExplain(a,b){
+ let ones=(a%10)*b, carry=Math.floor(ones/10), onesDigit=ones%10;
+ let tens=Math.floor(a/10)%10, tensTotal=tens*b+carry, carry2=Math.floor(tensTotal/10), tensDigit=tensTotal%10;
+ let hundreds=Math.floor(a/100), hundredsTotal=hundreds*b+carry2;
+ return `<div class="place"><div><div class="digit">${Math.floor(a/100)}</div><div class="label">hundreds</div></div><div><div class="digit">${Math.floor(a/10)%10}</div><div class="label">tens</div></div><div><div class="digit">${a%10}</div><div class="label">ones</div></div></div>
+ <div class="story"><b>Start from the ones.</b><br>${a%10} × ${b} = ${ones}. Write ${onesDigit}${carry?` and carry <span class="carry">${carry}</span>`:""}.</div>
+ <div class="story">${tens} × ${b}${carry?` + ${carry} carried`:""} = ${tensTotal}. Write ${tensDigit}${carry2?` and carry <span class="carry">${carry2}</span>`:""}.</div>
+ <div class="story">${hundreds} × ${b}${carry2?` + ${carry2} carried`:""} = ${hundredsTotal}.</div>`;
+}
+function render(){
+ qs.innerHTML=Object.keys(DATA).map(n=>`<button class="${+n===q?'primary':''}" onclick="q=${n};p=0;render()">Q${n}</button>`).join("");
+ let d=DATA[q],pg=pages();badge.textContent=`Question ${q} · Page ${p+1} of ${pg.length}`;bar.style.width=((p+1)/pg.length*100)+"%";back.disabled=p===0;next.textContent=p===pg.length-1?(q===9?"Back to lessons":"Next question →"):"Next →";
+ let page=pg[p],h="";
+ if(d.kind==="visual"){
+   if(page==="see")h=`<h2>${d.title}</h2><div class="story">First, look for <b>two equal groups</b>.</div>${frameSet(d.a,d.obj)}${frameSet(d.b,d.obj)}${pick("How many are in each equal group?",[d.a,d.a-5,d.a+5],d.a)}`;
+   if(page==="add")h=`<h2>Repeated addition</h2><div class="story">There are two equal groups of ${d.a}.</div>${tiles([String(d.a),"+",String(d.b),"=",String(d.total)],["×",String(d.total-5),String(d.a*2+2)])}<div class="summary">Repeated addition means adding equal groups: ${d.a} + ${d.b} = ${d.total}.</div>`;
+   if(page==="multiply")h=`<h2>Turn equal groups into multiplication</h2><div class="story"><b>2 groups</b> of <b>${d.a}</b> means:</div>${tiles(["2","×",String(d.a),"=",String(d.total)],["+",String(d.a),String(d.total-2)])}<div class="summary">Multiplication is a fast way to add equal groups. <b>number of groups × amount in each group = total</b>.</div>`;
+   if(page==="summary")h=`<h2>What to remember</h2><div class="summary">Picture → equal groups → repeated addition → multiplication.<br><br>${d.a} + ${d.a} = ${d.total}<br>2 × ${d.a} = ${d.total}</div>`;
+   if(page==="test")h=`<h2>Quick test</h2>${pick("If there are 3 equal boxes with 8 apples in each box, which sentence matches?",["3 × 8","3 + 8","8 ÷ 3"],"3 × 8")}`;
+ } else if(d.kind==="multi"){
+   let [a,b]=d.pairs[0],[c,e]=d.pairs[1];
+   if(page==="concept")h=`<h2>${d.title}</h2><div class="rule"><b>Rule:</b> multiply from right to left: ones → tens → hundreds. If a place makes 10 or more, carry to the next place.</div><div class="eq">${a} × ${b}</div><div class="eq">${c} × ${e}</div>`;
+   if(page==="first")h=`<h2>${a} × ${b}</h2>${multExplain(a,b)}${tiles([String(a),"×",String(b),"=",String(a*b)],["+",String(a*b+10),String(a*b-10)])}`;
+   if(page==="second")h=`<h2>${c} × ${e}</h2>${multExplain(c,e)}${tiles([String(c),"×",String(e),"=",String(c*e)],["+",String(c*e+10),String(c*e-10)])}`;
+   if(page==="summary")h=`<h2>Multiplication algorithm</h2><div class="summary">1. Start with the ones.<br>2. Multiply.<br>3. Write the ones digit.<br>4. Carry tens if needed.<br>5. Move left one place.<br>6. Add the carried number.<br>7. Check the size of your answer.</div>`;
+   if(page==="test")h=`<h2>Quick test</h2>${pick("What should you multiply first in 243 × 3?",["3 × 3 (ones)","2 × 3 (hundreds)","4 × 3 (tens)"],"3 × 3 (ones)")}`;
+ } else {
+   let [a,b]=d.pairs[0],[c,e]=d.pairs[1];
+   if(page==="zeroConcept")h=`<h2>${d.title}</h2><div class="story">Numbers ending in 0 can be made easier by separating the zero.</div><div class="rule"><b>${a} = ${a/10} tens.</b> So ${a} × ${b} = (${a/10} × ${b}) tens.</div>${pick("What happens to the final zero?",["It stays because the answer is still tens","We delete it forever","We add another two zeros"],"It stays because the answer is still tens")}`;
+   if(page==="first")h=`<h2>${a} × ${b}</h2><div class="eq">${a/10} × ${b} = ${(a/10)*b}</div><div class="story">That is ${(a/10)*b} tens = <b>${a*b}</b>.</div>${tiles([String(a),"×",String(b),"=",String(a*b)],["+",String((a/10)*b),String(a*b+100)])}`;
+   if(page==="second")h=`<h2>${c} × ${e}</h2><div class="eq">${c/10} × ${e} = ${(c/10)*e}</div><div class="story">That is ${(c/10)*e} tens = <b>${c*e}</b>.</div>${tiles([String(c),"×",String(e),"=",String(c*e)],["+",String((c/10)*e),String(c*e-100)])}`;
+   if(page==="summary")h=`<h2>Fast zero rule</h2><div class="summary">For a number ending in one zero: ignore the zero for a moment → multiply → put the zero back because you are counting tens.<br><br>Example: 270 × 2 → 27 × 2 = 54 → 540.</div>`;
+   if(page==="test")h=`<h2>Quick test</h2>${pick("Which is correct for 430 × 2?",["43 × 2 = 86, so 860","43 × 2 = 86, so 86","430 + 2 = 432"],"43 × 2 = 86, so 860")}`;
+ }
+ stage.innerHTML=h;
+}
+back.onclick=()=>{if(p>0){p--;render()}};next.onclick=()=>{let pg=pages();if(p<pg.length-1){p++;render()}else if(q<9){q++;p=0;render()}else location.href="../index.html"};render();
+</script></body></html>

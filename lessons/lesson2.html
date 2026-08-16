@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Lesson 2 — Division & Remainders</title>
+<style>
+:root{--ink:#23304a;--accent:#6c63ff;--soft:#f1efff;--good:#16875d;--bad:#c95656;--line:#e7e2f2;--warn:#ffb23f}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#fffaf4,#f6f2ff);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;background:#fffffff2;padding:12px 16px;border-bottom:1px solid #eee}header a{text-decoration:none;color:#5149cc;font-weight:800}
+main{max-width:1050px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.qs{display:flex;gap:8px;overflow:auto;padding:10px 0}
+button{border:1px solid var(--line);background:white;border-radius:14px;padding:11px 15px;font-size:16px;font-weight:800;color:var(--ink)}button.primary{background:var(--accent);color:white}.card{background:white;border-radius:24px;padding:18px;box-shadow:0 8px 28px #4b3d8015}
+.badge{display:inline-block;background:var(--soft);color:#5149cc;border-radius:999px;padding:6px 10px;font-weight:800}.progress{height:9px;background:#eee;border-radius:99px;overflow:hidden;margin:10px 0 16px}.bar{height:100%;background:var(--accent)}
+h1{margin:0;font-size:25px}h2{font-size:27px;margin:10px 0}.story{font-size:18px;line-height:1.55}.prompt{font-size:21px;font-weight:850;margin:17px 0 10px}.small{font-size:14px;color:#6c7486}
+.groups{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.group{display:flex;gap:4px;flex-wrap:wrap;max-width:150px;border:2px solid #8c84d8;border-radius:14px;padding:8px;background:#f7f5ff}.dot{width:20px;height:20px;border-radius:50%;background:#6c63ff}.leftover{display:flex;gap:4px;border:3px solid var(--warn);border-radius:14px;padding:8px;background:#fff7e7}
+.eq{font-size:30px;font-weight:900;text-align:center;padding:14px}.choicegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(max-width:650px){.choicegrid{grid-template-columns:1fr}}
+.feedback{min-height:30px;font-weight:800;margin-top:8px}.summary{font-size:20px;line-height:1.55;background:#effbf5;border-left:6px solid var(--good);padding:16px;border-radius:14px}.rule{background:#eef7ff;border-left:5px solid #5a8dcc;padding:13px;border-radius:12px}
+.tileTray,.slots{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0}.tile{min-width:65px;text-align:center;font-size:24px;padding:10px;border:2px solid #cfc9ef;border-radius:14px;background:#fff;touch-action:none;user-select:none}.slot{min-width:72px;height:56px;border:3px dashed #bbb4df;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:850}.slot.filled{border-style:solid;border-color:#7e73ff;background:#f1efff}
+.context{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.icon{font-size:58px}.controls{display:flex;justify-content:space-between;gap:12px;margin-top:16px}
+</style></head><body>
+<header><div class="top"><a href="../index.html">← Lessons</a><h1>Lesson 2 — Division & Remainders</h1></div></header>
+<main><div class="qs" id="qs"></div><div class="card"><span class="badge" id="badge"></span><div class="progress"><div id="bar" class="bar"></div></div><div id="stage"></div><div class="controls"><button id="back">← Back</button><button id="next" class="primary">Next →</button></div></div></main>
+<script>
+const DATA={
+1:{kind:"divide",items:[[35,8],[45,7],[46,9]],title:"Calculate with remainders"},
+2:{kind:"divide",items:[[52,9],[67,8],[50,6]],title:"Calculate with remainders"},
+3:{kind:"divide",items:[[66,8],[49,5],[53,7]],title:"Calculate with remainders"},
+4:{kind:"reverse",items:[[8,4,5],[3,9,1],[5,3,3]],title:"Find the missing dividend"},
+5:{kind:"reverse",items:[[4,5,1],[3,7,2],[9,4,1]],title:"Find the missing dividend"},
+6:{kind:"reverse",items:[[7,6,4],[5,8,2],[9,7,3]],title:"Find the missing dividend"},
+7:{kind:"word",total:43,size:6,icon:"🚐",mode:"atleast",title:"43 people need vans"},
+8:{kind:"word",total:48,size:7,icon:"⛵",mode:"atleast",title:"48 students need boats"},
+9:{kind:"word",total:31,size:6,icon:"💐",mode:"atmost",title:"31 flowers make bouquets"}
+};
+let q=1,p=0;const qs=document.getElementById("qs"),stage=document.getElementById("stage"),badge=document.getElementById("badge"),bar=document.getElementById("bar"),back=document.getElementById("back"),next=document.getElementById("next");
+function pages(){return DATA[q].kind==="divide"?["concept","practice","summary","test"]:DATA[q].kind==="reverse"?["rule","practice","summary","test"]:["story","divide","meaning","summary","test"]}
+function pick(prompt,opts,ans){return `<div class="prompt">${prompt}</div><div class="choicegrid">${opts.map(x=>`<button onclick="choose(this,'${x}','${ans}')">${x}</button>`).join("")}</div><div id="feedback" class="feedback"></div>`}
+window.choose=(b,v,a)=>{let f=document.getElementById("feedback");if(v===a){b.style.background="#dcf5e8";f.textContent="✅ Yes — explain why.";f.style.color="var(--good)"}else{f.textContent="Use the picture and think about the remainder.";f.style.color="var(--bad)"}}
+function tiles(target,distract=[]){let all=[...target,...distract].sort(()=>Math.random()-.5);setTimeout(()=>setup(target),0);return `<div class="small">Drag the tiles. On iPad, tap a tile then tap a box.</div><div class="tileTray">${all.map((v,i)=>`<div class="tile" id="t${i}" draggable="true" data-v="${v}">${v}</div>`).join("")}</div><div class="slots">${target.map(()=>'<div class="slot"></div>').join("")}</div><div id="feedback" class="feedback"></div>`}
+function setup(target){let sel=null,ts=[...document.querySelectorAll(".tile")],ss=[...document.querySelectorAll(".slot")];function place(t,s){if(s.dataset.v)return;s.textContent=t.dataset.v;s.dataset.v=t.dataset.v;s.classList.add("filled");t.style.visibility="hidden";check()}function check(){if(ss.every(s=>s.dataset.v)){let ok=ss.map(s=>s.dataset.v).join("|")===target.join("|"),f=document.getElementById("feedback");f.textContent=ok?"✅ Correct sentence.":"Not quite — clear a box and try again.";f.style.color=ok?"var(--good)":"var(--bad)"}}ts.forEach(t=>{t.onclick=()=>sel=t;t.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",t.id))});ss.forEach(s=>{s.onclick=()=>{if(s.dataset.v){let t=ts.find(x=>x.dataset.v===s.dataset.v&&x.style.visibility==="hidden");if(t)t.style.visibility="visible";delete s.dataset.v;s.textContent="";s.classList.remove("filled")}else if(sel)place(sel,s)};s.addEventListener("dragover",e=>e.preventDefault());s.addEventListener("drop",e=>{e.preventDefault();let t=document.getElementById(e.dataTransfer.getData("text/plain"));if(t)place(t,s)})})}
+function groupPic(total,size){let full=Math.floor(total/size),r=total%size,h='<div class="groups">';for(let i=0;i<full;i++){h+='<div class="group">'+Array.from({length:size},()=>'<span class="dot"></span>').join("")+'</div>'}h+='</div>';if(r)h+=`<div class="prompt">Left over</div><div class="leftover">${Array.from({length:r},()=>'<span class="dot"></span>').join("")}</div>`;return h}
+function render(){
+ qs.innerHTML=Object.keys(DATA).map(n=>`<button class="${+n===q?'primary':''}" onclick="q=${n};p=0;render()">Q${n}</button>`).join("");
+ let d=DATA[q],pg=pages();badge.textContent=`Question ${q} · Page ${p+1} of ${pg.length}`;bar.style.width=((p+1)/pg.length*100)+"%";back.disabled=p===0;next.textContent=p===pg.length-1?(q===9?"Back to lessons":"Next question →"):"Next →";
+ let page=pg[p],h="";
+ if(d.kind==="divide"){
+   if(page==="concept"){let [a,b]=d.items[0],quo=Math.floor(a/b),r=a%b;h=`<h2>${d.title}</h2><div class="story">Division with remainder means: make as many <b>full equal groups</b> as possible, then count what is left.</div>${groupPic(a,b)}<div class="eq">${a} ÷ ${b} = ${quo} R ${r}</div><div class="rule"><b>Rule:</b> remainder must always be smaller than the divisor.</div>`}
+   if(page==="practice"){h=`<h2>Build all 3 division sentences</h2>`+d.items.map(([a,b])=>{let quo=Math.floor(a/b),r=a%b;return `<div class="prompt">${a} ÷ ${b}</div>${tiles([String(a),"÷",String(b),"=",String(quo),"R",String(r)],["×","+",String(quo+1),String(Math.max(0,r-1))])}`}).join("")}
+   if(page==="summary")h=`<h2>What to remember</h2><div class="summary">Dividend ÷ divisor = quotient R remainder.<br><br>Check: divisor × quotient + remainder = dividend.<br>And remainder &lt; divisor.</div>`;
+   if(page==="test"){let [a,b]=d.items[1],quo=Math.floor(a/b),r=a%b;h=`<h2>Explain the remainder</h2>${pick(`In ${a} ÷ ${b} = ${quo} R ${r}, what does R ${r} mean?`,[`${r} items could not make another full group`,`${r} full groups`,`${b} items are missing`],`${r} items could not make another full group`)}`}
+ } else if(d.kind==="reverse"){
+   if(page==="rule"){let [div,qv,r]=d.items[0],n=div*qv+r;h=`<h2>${d.title}</h2><div class="story">If the starting number is missing, rebuild it from the groups and the leftover.</div><div class="eq">? ÷ ${div} = ${qv} R ${r}</div><div class="rule"><b>Missing dividend = divisor × quotient + remainder</b></div><div class="eq">${div} × ${qv} + ${r} = ${n}</div>`}
+   if(page==="practice"){h=`<h2>Build the missing numbers</h2>`+d.items.map(([div,qv,r])=>{let n=div*qv+r;return `<div class="prompt">_____ ÷ ${div} = ${qv} R ${r}</div>${tiles([String(div),"×",String(qv),"+",String(r),"=",String(n)],["÷",String(n+1),String(n-r)])}`}).join("")}
+   if(page==="summary")h=`<h2>Reverse division rule</h2><div class="summary">To rebuild the dividend:<br><b>divisor × quotient + remainder</b>.<br><br>Why? quotient tells how many complete groups, divisor tells the size of each group, and remainder is what is left.</div>`;
+   if(page==="test"){let [div,qv,r]=d.items[2],n=div*qv+r;h=`<h2>Quick test</h2>${pick(`Which calculation finds the missing number in _____ ÷ ${div} = ${qv} R ${r}?`,[`${div} × ${qv} + ${r}`,`${div} + ${qv} × ${r}`,`${qv} ÷ ${div} + ${r}`],`${div} × ${qv} + ${r}`)}`}
+ } else {
+   let quo=Math.floor(d.total/d.size),r=d.total%d.size,needed=d.mode==="atleast"?(r?quo+1:quo):quo;
+   if(page==="story"){h=`<h2>${d.title}</h2><div class="context"><div class="icon">${d.icon}</div><div class="story">${q===7?"43 people go on a trip. Each van holds at most 6 people. How many vans are needed at least?":q===8?"48 students go boating. Each boat carries at most 7 students. How many boats are needed at least?":"A bouquet needs 6 flowers. With 31 flowers, how many full bouquets can we make at most?"}</div></div><div class="rule"><b>First question:</b> Is this asking for “at least enough containers” or “at most full groups”?</div>`}
+   if(page==="divide")h=`<h2>Divide first</h2>${tiles([String(d.total),"÷",String(d.size),"=",String(quo),"R",String(r)],["×","+",String(needed),String(Math.max(0,r-1))])}${groupPic(d.total,d.size)}`;
+   if(page==="meaning"){
+     if(d.mode==="atleast")h=`<h2>What does the remainder mean here?</h2><div class="story">${quo} full ${q===7?"vans":"boats"} hold ${quo*d.size} people/students. But <b>${r} still need a place</b>.</div>${pick("What should we do with the remainder?",["Use one more "+(q===7?"van":"boat"),"Ignore it because it is not a full group"],"Use one more "+(q===7?"van":"boat"))}<div class="eq">${quo} + 1 = ${needed}</div>`;
+     else h=`<h2>What does the remainder mean here?</h2><div class="story">${quo} full bouquets use ${quo*d.size} flowers. ${r} flower is left, but a bouquet needs ${d.size}.</div>${pick("Can the leftover make another complete bouquet?",["No — keep only the full groups","Yes — count one more bouquet"],"No — keep only the full groups")}<div class="eq">Maximum full bouquets = ${needed}</div>`;
+   }
+   if(page==="summary")h=`<h2>Remainder meaning depends on the story</h2><div class="summary"><b>AT LEAST enough vans/boats:</b> any remainder means we need one more container.<br><br><b>AT MOST full bouquets/groups:</b> the remainder cannot make a full group, so do not count another group.</div>`;
+   if(page==="test")h=`<h2>Transfer test</h2>${pick("20 children need cars. Each car holds 6. How many cars are needed at least?",["3 cars","4 cars","2 cars"],"4 cars")}`;
+ }
+ stage.innerHTML=h;
+}
+back.onclick=()=>{if(p>0){p--;render()}};next.onclick=()=>{let pg=pages();if(p<pg.length-1){p++;render()}else if(q<9){q++;p=0;render()}else location.href="../index.html"};render();
+</script></body></html>
